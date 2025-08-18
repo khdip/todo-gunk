@@ -4,7 +4,7 @@ type Todo struct {
 	ID          int64  `pb:"1"`
 	Title       string `pb:"2"`
 	Description string `pb:"3"`
-	IsComplete  bool   `pb:"4"`
+	IsCompleted  bool   `pb:"4"`
 }
 
 type CreateTodoRequest struct {
@@ -41,10 +41,17 @@ type CompleteTodoRequest struct {
 
 type CompleteTodoResponse struct{}
 
+type ListTodoRequest struct {}
+
+type ListTodoResponse struct {
+	Todo []Todo `pb:"1"`
+}
+
 type TodoService interface {
 	Create(CreateTodoRequest) CreateTodoResponse
 	Get(GetTodoRequest) GetTodoResponse
 	Update(UpdateTodoRequest) UpdateTodoResponse
 	Delete(DeleteTodoRequest) DeleteTodoResponse
 	Complete(CompleteTodoRequest) CompleteTodoResponse
+	List(ListTodoRequest) ListTodoResponse
 }

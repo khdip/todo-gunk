@@ -2,7 +2,6 @@ package todo
 
 import (
 	"context"
-	"log"
 
 	tpb "todo-gunk/gunk/v1/todo"
 	"todo-gunk/todo/storage"
@@ -19,9 +18,9 @@ func (s *Svc) Create(ctx context.Context, req *tpb.CreateTodoRequest) (*tpb.Crea
 		Title:       req.GetTodo().Title,
 		Description: req.GetTodo().Description,
 	}
-	log.Printf("%#v", todo)
+
 	id, err := s.core.Create(context.Background(), todo)
-	log.Printf("%#v", id)
+
 	if err != nil {
 		return nil, status.Error(codes.Internal, "Failed to create todo")
 	}

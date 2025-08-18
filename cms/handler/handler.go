@@ -11,8 +11,6 @@ import (
 	tpb "todo-gunk/gunk/v1/todo"
 )
 
-// const sessionName = "cms-session"
-
 type Handler struct {
 	templates *template.Template
 	decoder   *schema.Decoder
@@ -29,13 +27,13 @@ func GetHandler(decoder *schema.Decoder, session *sessions.CookieStore, tc tpb.T
 	hand.GetTemplate()
 
 	r := mux.NewRouter()
-	// r.HandleFunc("/", hand.home)
-
-	s := r.NewRoute().Subrouter()
-	s.HandleFunc("/create", hand.createTodo)
-	s.HandleFunc("/store", hand.storeTodo)
-	// s.Use(hand.authMiddleware)
-	// r.PathPrefix("/assets/").Handler(http.StripPrefix("/assets/", http.FileServer(http.Dir("./assets/"))))
+	r.HandleFunc("/", hand.listTodo)
+	r.HandleFunc("/create", hand.createTodo)
+	r.HandleFunc("/store", hand.storeTodo)
+	r.HandleFunc("/edit/{id}", hand.editTodo)
+	r.HandleFunc("/update/{id}", hand.updateTodo)
+	r.HandleFunc("/delete/{id}", hand.deleteTodo)
+	r.HandleFunc("/complete/{id}", hand.completeTodo)
 	r.NotFoundHandler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		err := hand.templates.ExecuteTemplate(w, "404.html", nil)
 		if err != nil {
@@ -49,6 +47,8 @@ func GetHandler(decoder *schema.Decoder, session *sessions.CookieStore, tc tpb.T
 func (h *Handler) GetTemplate() {
 	h.templates = template.Must(template.ParseFiles(
 		"cms/assets/templates/create-todo.html",
+		"cms/assets/templates/edit-todo.html",
 		"cms/assets/templates/404.html",
+		"cms/assets/templates/list-todo.html",
 	))
 }
